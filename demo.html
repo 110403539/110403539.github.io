@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>樂透遊戲</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script type="text/javascript">
+            function isValidNumber(number, numbersArray) {
+                if (isNaN(number) || number < 1 || number > 10) {
+                    return false;
+                }
+
+                if (numbersArray.includes(number)) {
+                    return false;
+                }
+                numbersArray.push(number);
+                return true;
+            }
+            /**(4)**/
+            function restart() {
+                document.getElementById('number1').value = '';
+                document.getElementById('number2').value = '';
+                document.getElementById('number3').value = '';
+                document.getElementById('result').innerHTML = '';
+            }
+
+            function drawLottery() {
+                var number1 = parseInt(document.getElementById("number1").value);
+                var number2 = parseInt(document.getElementById("number2").value);
+                var number3 = parseInt(document.getElementById("number3").value);
+
+                /**(5)**/
+                var numbersArray = [];
+                if (!isValidNumber(number1, numbersArray) || !isValidNumber(number2, numbersArray) || !isValidNumber(number3, numbersArray)) {
+                    alert("請輸入有效的號碼（1-10之間的數字，不可重複）");
+                    restart();
+                    return;
+                }
+
+                var luckyNumbers = [];
+                while (luckyNumbers.length < 3) {
+                    var luckyNumber = Math.floor(Math.random() * 10) + 1;
+                    if (!luckyNumbers.includes(luckyNumber)) {
+                        luckyNumbers.push(luckyNumber);
+                    }
+                }
+
+                var matchingCount = 0;
+                if (luckyNumbers.includes(number1)) {
+                    matchingCount++;
+                }
+                if (luckyNumbers.includes(number2)) {
+                    matchingCount++;
+                }
+                if (luckyNumbers.includes(number3)) {
+                    matchingCount++;
+                }
+
+                /**(2)**/
+                var resultContent = document.getElementById('result');
+                resultContent.innerHTML = "得獎號碼：" + luckyNumbers.join("、") + "<br>";
+
+                if (matchingCount === 3) {
+                    resultContent.innerHTML += "中獎囉!  是頭獎！ 一兆";
+                } else if (matchingCount === 2) {
+                    resultContent.innerHTML += "中獎囉!  是貳獎！ 一千萬";
+                } else if (matchingCount === 1) {
+                    resultContent.innerHTML += "中獎囉!  是參獎！ 十塊";
+                } else {
+                    resultContent.innerHTML += "QQ 下次再來";
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container" >
+            
+            <h1>樂透遊戲</h1>
+            <div class="converter">
+                <P><B>歡迎來到開心娛樂城，請輸入三個號碼(範圍是數字1~10)，全部對中為頭獎，中兩個為貳獎，中一個為參獎，趕快開始吧 </B></P>
+                <label for="number1">NUMBER1：</label>
+                <input type="number" id="number1">
+
+                <label for="number2">NUMBER2：</label>
+                <input type="number" id="number2">
+
+                <label for="number3">NUMBER3：</label>
+                <input type="number" id="number3">
+                <br><br>
+                <button onclick="drawLottery()">開獎</button>
+                <button onclick="restart()">重新開始</button>
+                <br><br>
+                <div id="result">
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
